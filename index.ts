@@ -5,8 +5,11 @@ import * as Sentry from "@sentry/node";
 // @ts-ignore: missing type definitions
 import { dummyLayout } from "log4js/lib/layouts";
 
-import type { SeverityLevel, User } from "@sentry/node/types";
-import type { NodeClientOptions } from "@sentry/node/types/types";
+import type {
+	SeverityLevel,
+	User,
+} from "@sentry/node";
+import type { NodeClientOptions } from "@sentry/node/build/types/types";
 import type {
 	AppenderFunction,
 	LayoutFunction,
@@ -28,6 +31,10 @@ export interface Config extends Partial<NodeClientOptions> {
 	 * Sentry user data for scope setting
 	 */
 	user?: User;
+	/**
+	 * Levels to be reported to Sentry.
+	 */
+	levels?: SentryAppenderLevels[];
 }
 
 declare module "log4js" {
@@ -95,9 +102,9 @@ export function sentry(
 }
 
 export class ConfigError extends Error {
-	override name = "ConfigError";
 	constructor(msg: string, cause?: unknown) {
 		super(msg);
+		this.name = this.constructor.name;
 		this.cause = cause;
 	}
 }
