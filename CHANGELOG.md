@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/xseman/log4js-appender-sentry/compare/v0.1.1...v0.1.2) (2025-03-31)
+
+
+### Maintenance
+
+* dependencies & config maintenance ([#4](https://github.com/xseman/log4js-appender-sentry/issues/4)) ([2ca7713](https://github.com/xseman/log4js-appender-sentry/commit/2ca77135ec59f6fe1c60ea6e77a647622e52db06))
+
 ## [0.1.1](https://github.com/xseman/log4js-appender-sentry/compare/v0.1.0...v0.1.1) (2024-10-24)
 
 
