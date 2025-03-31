@@ -23,33 +23,30 @@
 		"typecheck": "tsc --noEmit",
 		"fmt": "dprint fmt",
 		"fmt:check": "dprint check",
-		"test": "node --test --loader=ts-node/esm index.test.mts",
-		"test:watch": "node --test --watch --loader=ts-node/esm index.test.mts"
+		"test": "TS_NODE_TRANSPILE_ONLY=true node --test --experimental-specifier-resolution=node --experimental-require-module --experimental-test-coverage --test-coverage-exclude=index.test.mts --loader=ts-node/esm --no-warnings index.test.mts",
+		"test:watch": "TS_NODE_TRANSPILE_ONLY=true node --test --experimental-specifier-resolution=node --experimental-require-module --watch --loader=ts-node/esm --no-warnings src/*.test.mts"
 	},
 	"dependencies": {
 		"@sentry/node": "~8.28.0"
 	},
 	"devDependencies": {
-		"dprint": "^0.47.0",
-		"@types/node": "^22.7.0",
+		"dprint": "^0.49.0",
+		"@types/node": "^22.13.0",
 		"ts-node": "~10.9.0",
-		"typescript": "^5.6.0"
+		"typescript": "^5.8.0"
 	},
 	"peerDependencies": {
 		"log4js": ">=6"
 	},
-	"types": "./dist/index.d.ts",
-	"files": [
-		"./dist"
-	],
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
-			"require": "./dist/index.js"
+			"types": "./dist/index.d.ts"
 		}
 	},
-	"engines": {
-		"node": ">=18.18",
-		"npm": ">=7"
-	}
+	"files": [
+		"dist/*.js",
+		"dist/*.d.ts",
+		"!dist/*test*"
+	]
 }
