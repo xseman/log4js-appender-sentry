@@ -1,12 +1,14 @@
 import assert from "node:assert";
-import { describe, test } from "node:test";
+import {
+	describe,
+	test,
+} from "node:test";
 
+import type { LoggingEvent } from "log4js";
 import { dummyLayout } from "log4js/lib/layouts";
 import Level from "log4js/lib/levels";
 
-import type { LoggingEvent } from "log4js";
-
-import { sentry } from "./dist";
+import { sentry } from "./dist/index.js";
 
 function makeLogEvent(): LoggingEvent {
 	return {
