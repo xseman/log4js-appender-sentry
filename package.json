@@ -44,7 +44,7 @@
 		"test:watch": "bun test ./src --watch --coverage"
 	},
 	"dependencies": {
-		"@sentry/node": "~8.55.2"
+		"@sentry/node": "^11.8.0"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.4.3",

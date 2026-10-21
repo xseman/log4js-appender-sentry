@@ -2,9 +2,6 @@
 
 import * as Sentry from "@sentry/node";
 
-// @ts-ignore: missing type definitions
-import { dummyLayout } from "log4js/lib/layouts";
-
 import type {
 	NodeOptions,
 	SeverityLevel,
@@ -19,7 +16,7 @@ import type {
 	LoggingEvent,
 } from "log4js";
 
-export interface Config extends Partial<NodeOptions> {
+export interface Config extends NodeOptions {
 	/**
 	 * The Data Source Name (DSN) for connecting to the Sentry server.
 	 *
@@ -31,10 +28,6 @@ export interface Config extends Partial<NodeOptions> {
 	 * Sentry user data for scope setting
 	 */
 	user?: User;
-	/**
-	 * Levels to be reported to Sentry.
-	 */
-	levels?: SentryAppenderLevels[];
 }
 
 declare module "log4js" {
@@ -59,7 +52,7 @@ const levelMap = {
 	WARN: "warning",
 	ERROR: "error",
 	FATAL: "fatal",
-} satisfies Record<SentryAppenderLevels, SeverityLevel | undefined>;
+} satisfies Record<SentryAppenderLevels, SeverityLevel>;
 
 export function sentry(
 	config: Config,
@@ -69,27 +62,19 @@ export function sentry(
 	Sentry.init(config);
 
 	function appender(loggingEvent: LoggingEvent) {
-		const eventLevel = levels.getLevel(loggingEvent.level.levelStr);
 		/**
 		 * Sentry is mainly used to report application errors.
 		 */
-		if (eventLevel.isGreaterThanOrEqualTo(levels.WARN) === false) {
+		if (!loggingEvent.level.isGreaterThanOrEqualTo(levels.WARN)) {
 			return;
 		}
 
-		Sentry.withScope((scope) => {
-			const level = eventLevel.levelStr as SentryAppenderLevels;
+		const level = loggingEvent.level.levelStr as SentryAppenderLevels;
 
-			scope.setLevel(levelMap[level]);
-			scope.setExtra("category", loggingEvent.categoryName);
-
-			if (config.user) {
-				scope.setUser(config.user);
-			}
-
-			const msg = layout(loggingEvent);
-			const eventId = Sentry.captureMessage(msg);
-			// const eventId = Sentry.captureException(msg);
+		Sentry.captureMessage(layout(loggingEvent), {
+			level: levelMap[level],
+			extra: { category: loggingEvent.categoryName },
+			user: config.user,
 		});
 	}
 
@@ -101,21 +86,11 @@ export function sentry(
 	return appender;
 }
 
-export class ConfigError extends Error {
-	constructor(msg: string, cause?: unknown) {
-		super(msg);
-		this.name = this.constructor.name;
-		this.cause = cause;
-	}
-}
-
 export function configure(
 	config: Config,
 	layouts: LayoutsParam,
 	_findAppender: () => AppenderFunction,
 	levels: Levels,
 ): AppenderFunction {
-	const layout = layouts?.basicLayout ?? dummyLayout;
-
-	return sentry(config, levels, layout);
+	return sentry(config, levels, layouts.basicLayout);
 }

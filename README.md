@@ -15,6 +15,8 @@ npm install log4js-appender-sentry
 bun add log4js-appender-sentry
 ```
 
+Requires Node.js `>=20.19` or `>=22.12` (as [@sentry/node][sentry_javascript] v11).
+
 ## Configuration
 
 ### TypeScript
@@ -64,6 +66,11 @@ const log = log4js.getLogger();
 Sentry is mainly used to report application errors so the default log level is
 `WARN` and above, other log levels will be ignored.
 
+Any other [Sentry option][sentry_options] (`environment`, `release`,
+`sampleRate`, ...) is passed to `Sentry.init`.
+
+[sentry_options]: https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/
+
 ### type
 
 _Required_\
@@ -88,15 +95,15 @@ _Optional_\
 Type: `User`
 
 ```ts
-// import { User } from "@sentry/node/types";
+// import type { User } from "@sentry/node";
 
 interface User {
-	[key: string]: any;
-	id?: string;
-	ip_address?: string;
+	[key: string]: unknown;
+	id?: string | number;
+	ip_address?: string | null;
 	email?: string;
 	username?: string;
-	segment?: string;
+	geo?: GeoLocation;
 }
 ```
 
