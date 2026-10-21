@@ -61,6 +61,18 @@ const log = log4js.getLogger();
 // ...
 ```
 
+### Shutdown
+
+Call `log4js.shutdown` before the process exits, it flushes queued events to
+Sentry. The callback runs once Sentry is closed, at the latest after
+[`shutdownTimeout`](#shutdowntimeout).
+
+```ts
+process.on("SIGTERM", () => {
+	log4js.shutdown(() => process.exit(0));
+});
+```
+
 ## Options
 
 Sentry is mainly used to report application errors so the default log level is
@@ -111,3 +123,12 @@ User data used for scope configuration. For additional information, see the
 Sentry user [documentation][sentry_user].
 
 [sentry_user]: https://docs.sentry.io/platforms/javascript/enriching-events/identify-user/
+
+### shutdownTimeout
+
+_Optional_\
+Type: `number`\
+Default: `2000`
+
+Maximum time in milliseconds `log4js.shutdown` waits for queued events to be
+sent to Sentry.

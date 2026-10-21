@@ -12,7 +12,6 @@ import type {
 	LayoutFunction,
 	LayoutsParam,
 	Levels,
-	Log4js,
 	LoggingEvent,
 } from "log4js";
 
@@ -54,6 +53,11 @@ const levelMap = {
 	FATAL: "fatal",
 } satisfies Record<SentryAppenderLevels, SeverityLevel>;
 
+/**
+ * Same default as the Sentry SDK uses when it flushes on an uncaught exception.
+ */
+const DEFAULT_SHUTDOWN_TIMEOUT = 2_000;
+
 export function sentry(
 	config: Config,
 	levels: Levels,
@@ -78,10 +82,14 @@ export function sentry(
 		});
 	}
 
-	// log4js waits until every appender calls the shutdown callback.
-	appender.shutdown = ((done) => {
-		Sentry.close().then(() => done?.(), done);
-	}) satisfies Log4js["shutdown"];
+	/**
+	 * log4js.shutdown waits until every appender calls `done`. Without the
+	 * timeout an unreachable Sentry would keep the process alive.
+	 */
+	appender.shutdown = (done: (error?: Error) => void) => {
+		Sentry.close(config.shutdownTimeout ?? DEFAULT_SHUTDOWN_TIMEOUT)
+			.then(() => done(), done);
+	};
 
 	return appender;
 }
