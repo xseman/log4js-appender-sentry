@@ -5,7 +5,40 @@ Sends logging events to Sentry. This appender integrates
 
 [sentry_javascript]: https://github.com/getsentry/sentry-javascript
 
-![visual](docs/visual.svg)
+```mermaid
+%%{init: {"theme": "base", "themeVariables": {
+    "actorBkg": "#eef2f8", "actorBorder": "#b4c2da", "actorTextColor": "#2f3b52",
+    "actorLineColor": "#9aa3b5", "signalColor": "#7d869a", "signalTextColor": "#2f3b52",
+    "noteBkgColor": "#fdf3d7", "noteBorderColor": "#e8d49a", "noteTextColor": "#2f3b52"
+}}}%%
+sequenceDiagram
+    participant App as app
+    participant L as log4js
+    participant A as log4js-appender-sentry
+    participant S as Sentry
+
+    rect rgb(232, 245, 233)
+        App->>L: log4js.configure()
+        L->>A: configure()
+        Note over A: Sentry.init()
+    end
+
+    rect rgb(252, 232, 236)
+        App->>L: log.error()
+        L->>A: logging event
+        Note over A: ignore levels below WARN
+        A-)S: Sentry.captureMessage()
+    end
+
+    rect rgb(237, 231, 246)
+        App->>L: log4js.shutdown(cb)
+        L->>A: shutdown(done)
+        A->>S: Sentry.close(shutdownTimeout)
+        S-->>A: events sent or timeout
+        A-->>L: done()
+        L-->>App: cb()
+    end
+```
 
 ## Installation
 
