@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/xseman/log4js-appender-sentry/compare/v0.2.0...v0.2.1) (2026-10-21)
+
+
+### Documentation
+
+* replace the drawio diagram with a mermaid sequence diagram ([9e0f779](https://github.com/xseman/log4js-appender-sentry/commit/9e0f7799e15bf79b8db045854138ad5960852a1a))
+
 ## [0.2.0](https://github.com/xseman/log4js-appender-sentry/compare/v0.1.2...v0.2.0) (2026-10-21)
 
 
