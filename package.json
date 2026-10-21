@@ -1,11 +1,7 @@
 {
 	"name": "log4js-appender-sentry",
-	"description": "Sentry Appender for log4js-node",
 	"version": "0.1.2",
-	"license": "Apache-2.0",
-	"author": "Filip Seman <filip.seman@pm.me>",
-	"funding": "https://github.com/sponsors/xseman",
-	"homepage": "https://github.com/xseman/log4js-appender-sentry#readme",
+	"description": "Sentry Appender for log4js-node",
 	"keywords": [
 		"logging",
 		"log",
@@ -15,10 +11,28 @@
 		"sentry",
 		"appender"
 	],
+	"homepage": "https://github.com/xseman/log4js-appender-sentry#readme",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/xseman/log4js-appender-sentry.git"
 	},
+	"funding": "https://github.com/sponsors/xseman",
+	"license": "Apache-2.0",
+	"author": "Filip Seman <filip.seman@pm.me>",
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"types": "./lib/index.d.ts",
+			"import": "./lib/index.js",
+			"require": "./lib/index.js"
+		}
+	},
+	"types": "./lib/index.d.ts",
+	"files": [
+		"lib/**/*.js",
+		"lib/**/*.d.ts",
+		"!lib/**/*_test*"
+	],
 	"scripts": {
 		"prebuild": "node -e \"fs.rmSync('lib',{recursive:true,force:true})\"",
 		"build": "tsc --build",
@@ -32,28 +46,14 @@
 	"dependencies": {
 		"@sentry/node": "~8.55.2"
 	},
-	"peerDependencies": {
-		"log4js": ">=6"
-	},
 	"devDependencies": {
-		"@types/bun": "^1.4.2",
-		"@types/node": "^24.13.3",
-		"dprint": "~0.57.4",
+		"@types/bun": "^1.4.3",
+		"@types/node": "^26.6.5",
+		"dprint": "~0.64.1",
 		"log4js": "^6.9.1",
 		"typescript": "~7.0.2"
 	},
-	"types": "./lib/index.d.ts",
-	"exports": {
-		"./package.json": "./package.json",
-		".": {
-			"types": "./lib/index.d.ts",
-			"import": "./lib/index.js",
-			"require": "./lib/index.js"
-		}
-	},
-	"files": [
-		"lib/**/*.js",
-		"lib/**/*.d.ts",
-		"!lib/**/*_test*"
-	]
+	"peerDependencies": {
+		"log4js": ">=6"
+	}
 }
