@@ -26,8 +26,8 @@
 		"fmt:check": "dprint check",
 		"typecheck": "tsc --noEmit",
 		"typecheck:test": "tsc -p tsconfig.test.json",
-		"test": "bun test src/ --coverage --coverage-reporter=text --coverage-reporter=lcov",
-		"test:watch": "bun test src/ --watch --coverage"
+		"test": "bun test ./src --coverage --coverage-reporter=text --coverage-reporter=lcov",
+		"test:watch": "bun test ./src --watch --coverage"
 	},
 	"dependencies": {
 		"@sentry/node": "~8.55.2"
